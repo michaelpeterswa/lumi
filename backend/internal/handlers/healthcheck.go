@@ -17,5 +17,5 @@ func HealthcheckHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	w.Write(health)
+	_, _ = w.Write(health)
 }
