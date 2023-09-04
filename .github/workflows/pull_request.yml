@@ -31,6 +31,7 @@ jobs:
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v2
         with:
+          working-directory: backend
           version: v1.51.1
 
   yamllint:

@@ -15,6 +15,7 @@ services:
       LUMI_DRAGONFLY_HOST: "dragonfly"
       LUMI_DRAGONFLY_PORT: "6379"
       LUMI_DRAGONFLY_AUTH: ""
+      # yamllint disable-line rule:line-length
       LUMI_COCKROACH_URL: "postgresql://lumi@cockroach:26257/lumi?sslmode=disable"
 
     depends_on:

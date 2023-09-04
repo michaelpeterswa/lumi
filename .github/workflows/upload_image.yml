@@ -59,7 +59,7 @@ jobs:
             VERSION=${{ steps.meta-frontend.outputs.version }}
           tags: ${{ steps.meta-frontend.outputs.tags }}
           labels: ${{ steps.meta-frontend.outputs.labels }}
-      
+
       - name: Build and Push "backend" to Container Registry
         uses: docker/build-push-action@v3
         with:
