@@ -1,0 +1,65 @@
+---
+version: "3.3"
+
+services:
+  backend:
+    build:
+      context: backend
+      dockerfile: Dockerfile
+    privileged: true  # required for passing through /dev
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    environment:
+      LUMI_LOG_LEVEL: "debug"
+      LUMI_DRAGONFLY_HOST: "dragonfly"
+      LUMI_DRAGONFLY_PORT: "6379"
+      LUMI_DRAGONFLY_AUTH: ""
+      # yamllint disable-line rule:line-length
+      LUMI_COCKROACH_URL: "postgresql://lumi@cockroach:26257/lumi?sslmode=disable"
+
+    depends_on:
+      dragonfly:
+        condition: service_started
+      seedcockroachdb:
+        condition: service_completed_successfully
+  # frontend:
+  #   build:
+  #     context: frontend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3000:3000"
+  #   # depends_on:
+  #   #   - backend
+  dragonfly:
+    image: docker.dragonflydb.io/dragonflydb/dragonfly
+    ulimits:
+      memlock: -1
+    ports:
+      - "6379:6379"
+  cockroach:
+    image: cockroachdb/cockroach
+    environment:
+      COCKROACH_DATABASE: "lumi"
+      COCKROACH_USER: "lumi"
+      # COCKROACH_PASSWORD: "password" # password not supported in insecure mode
+    command: start-single-node --insecure
+    restart: "no"
+    ports:
+      - "26257:26257"
+      - "8083:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health?ready=1"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+  seedcockroachdb:
+    image: migrate/migrate
+    volumes:
+      - ./docker/cockroach/migrations:/migrations
+    entrypoint: >
+                /bin/sh -c 'sleep 5 && migrate -path=/migrations/ -database
+                "cockroachdb://lumi@cockroach:26257/lumi?sslmode=disable" up'
+    depends_on:
+      cockroach:
+        condition: service_healthy
