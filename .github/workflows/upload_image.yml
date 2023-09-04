@@ -48,11 +48,11 @@ jobs:
         uses: docker/setup-buildx-action@v2
 
       - name: Build and Push "frontend" to Container Registry
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           push: true
           provenance: true
-          context: frontend
+          context: "{{defaultContext}}:frontend"
           file: Dockerfile
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           build-args: |
@@ -65,7 +65,7 @@ jobs:
         with:
           push: true
           provenance: true
-          context: backend
+          context: "{{defaultContext}}:backend"
           file: Dockerfile
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           build-args: |
