@@ -4,7 +4,7 @@ type Movie = {
   }
   
 async function getMovies() {
-    const res = await fetch(`http://localhost:8080/api/v1/movies`, {
+    const res = await fetch(`${process.env.BACKEND_HOST_URL}/api/v1/movies`, {
       method: 'GET',
       cache: 'no-store',
     });
@@ -15,13 +15,11 @@ async function getMovies() {
 export default async function Movies() {
     const moviesData = getMovies();
     const movies: Movie[] = await moviesData;
-
-    console.log(movies[0].name);
-
+    
     return (
     <div className="flex flex-col items-center justify-center h-screen">
         {movies.map((movie) => (
-            <div className="collapse collapse-arrow bg-base-200">
+            <div className="collapse collapse-arrow bg-base-200 my-2">
                 <input type="radio" name="my-accordion-2"/> 
                     <div className="collapse-title text-xl font-medium">
                     {movie.name}
