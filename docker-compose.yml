@@ -6,7 +6,7 @@ services:
     build:
       context: backend
       dockerfile: Dockerfile
-    privileged: true  # required for passing through /dev
+    # image: ghcr.io/michaelpeterswa/lumi-backend
     ports:
       - "8080:8080"
       - "8081:8081"
@@ -27,10 +27,14 @@ services:
   #   build:
   #     context: frontend
   #     dockerfile: Dockerfile
+  #   # image: ghcr.io/michaelpeterswa/lumi-frontend
   #   ports:
   #     - "3000:3000"
-  #   # depends_on:
-  #   #   - backend
+  #   environment:
+  #     BACKEND_HOST_URL: http://backend:8080
+  #   depends_on:
+  #     backend:
+  #       condition: service_started
   dragonfly:
     image: docker.dragonflydb.io/dragonflydb/dragonfly
     ulimits:
