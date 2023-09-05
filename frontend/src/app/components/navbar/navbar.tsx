@@ -16,7 +16,6 @@ export default function NavBar() {
             </summary>
             <ul className="p-2 bg-base-200">
               <li><Link href="/movies">movies</Link></li>
-              <li><Link href="/health">health</Link></li>
             </ul>
           </details>
         </li>
