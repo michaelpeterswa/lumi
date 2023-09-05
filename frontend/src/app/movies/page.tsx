@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 type Movie = {
     name: string;
     year: number;
@@ -15,7 +17,7 @@ async function getMovies() {
 export default async function Movies() {
     const moviesData = getMovies();
     const movies: Movie[] = await moviesData;
-    
+
     return (
     <div className="flex flex-col items-center justify-center h-screen">
         {movies.map((movie) => (
